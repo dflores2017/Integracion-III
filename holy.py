@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import os.path as path
 import nltk
 from nltk.corpus import stopwords
+from unidecode import unidecode
 ##if path.exists('sesion.json'):
 ##     infile = open("sesion.json","r")
 ##     contents = infile.read()
@@ -44,7 +45,17 @@ for i in idNumSec:
           #sesion = open('sesion.json','w')
           soupBol = BeautifulSoup(var,'xml')
           text = soupBol.get_text(strip=True)
-          print text 
+          text= unidecode(text)
+          tokens = [t for t in text.split()]
+          clean_tokens = tokens[:] 
+          sr = stopwords.words('spanish')
+          for token in tokens:
+              if token in stopwords.words('spanish'):
+                  clean_tokens.remove(token)
+          freq = nltk.FreqDist(clean_tokens)
+          for key,val in freq.items():
+               key= key.encode('utf-8')
+               print (str(key) + ':' + str(val))
      break
 
                
